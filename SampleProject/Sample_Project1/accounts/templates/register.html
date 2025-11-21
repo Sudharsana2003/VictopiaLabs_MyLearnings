@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+
+<h1>Create an Account</h1>
+
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+
+{% if success %}
+    <p style="color: green;">{{ success }}</p>
+{% endif %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+
+    <label>First Name:</label><br>
+    <input type="text" name="first_name" required><br><br>
+
+    <label>Last Name:</label><br>
+    <input type="text" name="last_name" required><br><br>
+
+    <label>Username:</label><br>
+    <input type="text" name="username" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label>Password:</label><br>
+    <input type="password" name="password1" required><br><br>
+
+    <label>Confirm Password:</label><br>
+    <input type="password" name="password2" required><br><br>
+
+    <button type="submit">Register</button>
+</form>
+
+</body>
+</html>
