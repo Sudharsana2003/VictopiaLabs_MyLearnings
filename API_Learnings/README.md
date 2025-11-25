@@ -1,191 +1,227 @@
+# *MY Django Learnings*
 
-# 🚀 **Django REST Framework — Complete API Project Documentation**
+* CRUD operations
+* DRF Serializers
+* Token & JWT Authentication
+* Permissions & Groups
+* DRF Generic Views & Mixins
+* Pagination & Filtering
+* Q-Object Search
+* ViewSets & Routers
+* CORS handling
+* Python & JavaScript API clients
+---
 
-A comprehensive, production-ready backend API built with **Django** and **Django REST Framework (DRF)**.
-This project serves as a full learning + reference guide covering:
+# 📑 **Table of Contents**
 
-✔ CRUD operations
-✔ Authentication (JWT + Token + Session)
-✔ Permissions, Mixins, Generics
-✔ CORS
-✔ Pagination
-✔ Searching with Q-objects
-✔ Frontend integration
+1. Project Structure
+2. Features
+3. Installation & Setup
+4. Virtual Environment
+5. Installed Packages
+6. Running the Server
+7. API Architecture
+8. Models & Serializers
+9. API Endpoints (FBV, CBV, ViewSets)
+10. Create / Update / Delete Flow
+11. Authentication (Token + JWT)
+12. Permissions & Groups
+13. Pagination
+14. Search API (Q-Objects)
+15. CORS Handling
+16. JS Client (Port 8111)
+17. Python API Clients
+18. Future Enhancements
 
 ---
 
-# 📌 **Table of Contents**
+# 📁 **1. Project Structure**
 
-1. [Project Overview](#project-overview)
-2. [Tech Stack](#tech-stack)
-3. [Project Setup](#project-setup)
-4. [Getting Started](#getting-started)
-5. [HTTP Request Lifecycle](#http-request-lifecycle)
-6. [Models & Serializers](#models--serializers)
-7. [API Flow — GET & POST](#api-flow--get--post)
-8. [Generic Views](#generic-views)
-9. [Mixins](#mixins)
-10. [Permissions & Groups](#permissions--groups)
-11. [JWT Authentication (Deep Dive)](#jwt-authentication-deep-dive)
-12. [Frontend Integration (HTML Test Client)](#frontend-integration-html-test-client)
-13. [DRF Default Settings](#drf-default-settings)
+```
+backend/
+│
+├── manage.py
+├── db.sqlite3
+│
+├── cfehome/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   ├── wsgi.py
+│   └── __init__.py
+│
+├── api/
+│   ├── views.py
+│   ├── urls.py
+│   ├── models.py
+│   └── admin.py
+│
+├── products/
+│   ├── models.py
+│   ├── serializers.py
+│   ├── mixins.py
+│   ├── validators.py
+│   ├── permissions.py
+│   ├── views.py
+│   ├── viewsets.py
+│   ├── urls.py
+│   ├── migrations/
+│   └── admin.py
+│
+├── search/
+│   ├── views.py
+│   ├── urls.py
+│   ├── models.py
+│   └── migrations/
+│
+├── js_client/
+│   ├── index.html
+│   └── client.js
+│
+└── py_client/
+    ├── basic.py
+    ├── create.py
+    ├── list.py
+    ├── update.py
+    ├── delete.py
+    ├── delete_with_user.py
+    ├── token_test.py
+
+venv/
+requirements.txt
+```
 
 ---
 
-# 🧩 **1. Project Overview**
+# ⭐ **2. Features**
 
-This project demonstrates real-world, scalable API development, including:
+* Full CRUD for Product API
+* DRF Generic Views (Retrieve, Create, List, Update, Delete)
+* DRF Mixins (custom permission mixins)
+* ViewSets + Routers
+* Authentication
 
-* CRUD operations on **Product** model
-* Custom serializer logic
-* Permission-based access control
-* Token & JWT authentication
-* Pagination, validation, searching
-* Frontend test client using pure HTML + JS
-
----
-
-# 🛠 **2. Tech Stack**
-
-| Category  | Component                     |
-| --------- | ----------------------------- |
-| Language  | Python 3.x                    |
-| Framework | Django, Django REST Framework |
-| Auth      | SimpleJWT, DRF TokenAuth      |
-| Utility   | django-cors-headers, requests |
+  * Session
+  * Token
+  * JWT (SimpleJWT)
+* Custom Permissions (role-based & group-based)
+* Pagination (LimitOffset)
+* Q-Object Dynamic Search
+* Python scripts for API testing
+* JavaScript client (Login + JWT + API calls)
+* CORS enabled for port 8111
 
 ---
 
-# ⚙️ **3. Project Setup**
+# 🛠️ **3. Installation & Setup**
 
-### Virtual Environment
+Clone repo:
+
+```bash
+git clone <repo-url>
+cd backend
+```
+
+---
+
+# 🧪 **4. Create Virtual Environment**
 
 ```bash
 python -m venv venv
-venv\Scripts\activate   # Windows
+venv\Scripts\activate
 ```
-<img width="546" height="219" alt="image" src="https://github.com/user-attachments/assets/520e02f4-24f0-4286-9ce0-bfb5959abfe7" />
+<img width="546" height="219" alt="image" src="https://github.com/user-attachments/assets/0bdd3042-187f-44b3-8b53-56576670bfbd" />
 
+---
 
-### Install Dependencies
+# 📦 **5. Install Required Packages**
+
+```bash
+pip install -r requirements.txt
+```
+
+or manually:
 
 ```bash
 pip install django djangorestframework djangorestframework-simplejwt django-cors-headers requests
 ```
-<img width="975" height="401" alt="image" src="https://github.com/user-attachments/assets/8f948e20-2bc4-4f2f-820c-925e32b41966" />
-
-### Create Project & App
-
-```bash
-django-admin startproject cfehome .
-python manage.py startapp api
-```
-
-### Migrations
-
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-<img width="975" height="474" alt="image" src="https://github.com/user-attachments/assets/54ea8641-2b6b-47a1-98fa-8226d41c9eb9" />
-
-### Create Superuser
-
-```bash
-python manage.py createsuperuser
-```
-<img width="778" height="246" alt="image" src="https://github.com/user-attachments/assets/508e1a72-1aad-4f86-91d9-c060d77d2f72" />
-<img width="793" height="393" alt="image" src="https://github.com/user-attachments/assets/e853344d-20b9-47a6-a217-ab104de6b096" />
-
-## Stafff User created by SuperUser
-<img width="975" height="474" alt="image" src="https://github.com/user-attachments/assets/6df8a949-00a7-4132-88d6-c21da6f6ccd7" />
-
-
+<img width="975" height="401" alt="image" src="https://github.com/user-attachments/assets/0e504615-21f4-402a-9ebf-72032274ac5b" />
 
 ---
 
-# 🚀 **4. Getting Started**
-
-### Run Development Server
+# ▶️ **6. Run The Server**
 
 ```bash
 python manage.py runserver
 ```
 
-Your API is now live at:
+Default server:
 
 ```
 http://127.0.0.1:8000/
 ```
+<img width="816" height="385" alt="image" src="https://github.com/user-attachments/assets/0b6635b0-75cf-4ea9-b583-4e3784e02bc4" />
 
 ---
 
-# 🔄 **5. HTTP Request Lifecycle**
+# 🏗️ **7. API Architecture**
 
-| Step | Component   | Description                         |
-| ---- | ----------- | ----------------------------------- |
-| 1    | Client      | Sends HTTP request                  |
-| 2    | Django URLs | `path('api/', include('api.urls'))` |
-| 3    | DRF View    | Validates method + auth             |
-| 4    | Serializer  | Converts data JSON ↔ Python ↔ Model |
-| 5    | Response    | Returns JSON to frontend            |
-| 6    | Client      | Reads response                      |
+```
+Client → URL Router → View → Serializer → Model → DB
+                            ↓
+                       Response(JSON)
+```
+<img width="585" height="464" alt="image" src="https://github.com/user-attachments/assets/5cd87263-fe2f-4d39-837c-3adddb0fee53" />
 
 ---
 
-# 🧱 **6. Models & Serializers**
+# 🔧 **8. Models & Serializers**
 
-## Model (Database Fields)
+### `models.py`
 
 ```python
-title = models.CharField(...)
-price = models.DecimalField(...)
+class Product(models.Model):
+    title = models.CharField(max_length=120)
+    content = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    public = models.BooleanField(default=True)
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 ```
 
-## Serializer (API Fields)
+### `serializers.py`
 
 ```python
-sale_price = serializers.SerializerMethodField(read_only=True)
+class ProductSerializer(serializers.ModelSerializer):
+    sale_price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ["id", "title", "content", "price", "sale_price"]
+
+    def get_sale_price(self, obj):
+        return float(obj.price) * 0.8
 ```
-
-### Computed Fields
-
-```python
-def get_sale_price(self, obj):
-    return "%.2f" % (obj.price * 0.8)   # 20% discount
-```
-<img width="975" height="507" alt="image" src="https://github.com/user-attachments/assets/6c15b15e-33cb-48d4-88cf-1719d3e4c935" />
-
+<img width="975" height="474" alt="image" src="https://github.com/user-attachments/assets/0ad9ff1a-bac6-4c2d-86d6-5ec9f12adf68" />
 
 ---
 
-# 🔁 **7. API Flow — GET & POST**
+# 📡 **9. API Endpoints**
 
-### GET Flow
+## Function-Based View
 
-1. Fetch instance
-2. Serialize instance → Python dict
-3. Return JSON
-
-### POST Flow
-
-1. Receive JSON from client
-2. Validate via serializer
-3. Save to DB
-4. Return serializer data
-
+```python
+@api_view(["GET", "POST"])
+def api_home(request):
+    ...
 ```
-JSON → Serializer → Model  
-Model → Serializer → JSON
-```
+<img width="684" height="393" alt="image" src="https://github.com/user-attachments/assets/00dfbb42-4e6b-430d-89ec-2ce5174ae7e6" />
+<img width="975" height="561" alt="image" src="https://github.com/user-attachments/assets/4162125c-3466-4396-95ab-a1193f801251" />
 
----
 
-# 📚 **8. Generic Views**
 
-DRF provides powerful CRUD shortcuts:
+## Generic Views
 
-### List & Create
+### List + Create
 
 ```python
 class ProductListCreateAPIView(ListCreateAPIView):
@@ -193,7 +229,7 @@ class ProductListCreateAPIView(ListCreateAPIView):
     serializer_class = ProductSerializer
 ```
 
-### Retrieve & Update
+### Retrieve
 
 ```python
 class ProductDetailAPIView(RetrieveAPIView):
@@ -201,153 +237,241 @@ class ProductDetailAPIView(RetrieveAPIView):
     serializer_class = ProductSerializer
 ```
 
----
-
-# 🧩 **9. Mixins**
-
-Mixins allow custom combinations:
+### Update
 
 ```python
-class ProductMixinView(
-    Mixins.CreateModelMixin,
-    Mixins.ListModelMixin,
-    GenericAPIView
-):
+class ProductUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 ```
 
----
-
-# 🔐 **10. Permissions & Groups**
-
-### User Levels
-
-| Type                    | Meaning          |
-| ----------------------- | ---------------- |
-| Regular User            | Basic access     |
-| Staff (`is_staff=True`) | Admin panel      |
-| Superuser               | Full permissions |
-
-### Group-Based Permissions
-
-Example group:
-**ProductEditors**
-
-Permissions:
-
-* `add_product`
-* `change_product`
-* `view_product`
-* `delete_product` (optional)
-
-### Custom Mixin for Staff
+### Delete
 
 ```python
-class StaffEditorPermissionMixin:
-    permission_classes = [IsAdminUser, IsStaffEditorPermission]
+class ProductDeleteAPIView(DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+```
+
+## ViewSets + Routers
+
+```python
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+```
+
+Router:
+
+```python
+router.register("products", ProductViewSet)
 ```
 
 ---
 
-# 🔒 **11. JWT Authentication (Deep Dive)**
+# ✏️ **10. CRUD Flow**
 
-JWT provided by **djangorestframework-simplejwt**.
+### Create
 
-### Endpoints Provided
-
-| Purpose              | Endpoint              |
-| -------------------- | --------------------- |
-| Get access + refresh | `/api/token/`         |
-| Refresh access token | `/api/token/refresh/` |
-
-### Example Response
-
-```json
-{
-  "refresh": "refresh-token-string",
-  "access": "access-token-string"
-}
+```python
+serializer = ProductSerializer(data=request.data)
+serializer.is_valid(raise_exception=True)
+serializer.save()
 ```
 
-### Sending JWT With Request
+### Update
 
+```python
+serializer = ProductSerializer(instance, data=request.data, partial=True)
+serializer.is_valid(raise_exception=True)
+serializer.save()
 ```
-Authorization: Bearer <access_token>
+<img width="975" height="450" alt="image" src="https://github.com/user-attachments/assets/fe3bee2f-cea8-4ade-a87f-7794f80443f7" />
+
+
+### Delete
+
+```python
+instance.delete()
 ```
-
-### Why JWT?
-
-✔ Stateless → scalable
-✔ Faster than DB token lookup
-✔ Supports Refresh Token
-✔ Perfect for frontend apps
 
 ---
 
-<img width="975" height="518" alt="image" src="https://github.com/user-attachments/assets/fe233349-a949-405d-bc6f-08732ae6f773" />
+# 🔐 **11. Authentication**
 
-# 🌐 **12. Frontend Integration (HTML Test Client)**
+## Token Auth
 
-You created a local HTML client (e.g., `8111.html`) to test:
-
-✔ Login
-✔ Token retrieval
-✔ Authenticated GET/POST
-✔ CORS policies
-
-<img width="975" height="346" alt="image" src="https://github.com/user-attachments/assets/9e5babf8-4884-485d-9f8d-ced1ed31443c" />
-
-
-### Example JavaScript Flow
-
-```javascript
-fetch("http://127.0.0.1:8000/api/token/", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-        "username": "admin",
-        "password": "admin123"
-    })
-})
-.then(res => res.json())
-.then(data => {
-    localStorage.setItem("access", data.access);
-});
+```python
+from rest_framework.authentication import TokenAuthentication
 ```
 
-### Updating Auth Header
+Generate token:
 
-```javascript
-headers: {
-    "Authorization": "Bearer " + localStorage.getItem("access")
-}
+```bash
+python manage.py drf_create_token <username>
+```
+<img width="975" height="480" alt="image" src="https://github.com/user-attachments/assets/68d1afed-6973-4dcd-bca0-8aac638afd59" />
+
+Header format:
+
+```
+Authorization: Token <token>
+```
+<img width="975" height="370" alt="image" src="https://github.com/user-attachments/assets/6b76580a-96c9-41af-88b9-4a4f0e1a0a1e" />
+
+
+## JWT Auth (SimpleJWT)
+
+Install:
+
+```bash
+pip install djangorestframework-simplejwt
 ```
 
-This HTML client helps you test APIs **without React/Vue**.
-
----
-
-# ⚙️ **13. DRF Default Settings**
-
-Your project uses:
+Add to settings:
 
 ```python
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
-    ],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 5
+        "rest_framework_simplejwt.authentication.JWTAuthentication"
+    ]
 }
 ```
 
-✔ JWT as primary auth
-✔ Anonymous users: READ only
-✔ Pagination enabled globally
+Endpoints:
+
+* `/api/token/`
+* `/api/token/refresh/`
+
+Header:
+
+```
+Authorization: Bearer <access_token>
+```
+<img width="975" height="518" alt="image" src="https://github.com/user-attachments/assets/0fbc31f5-40bd-4815-94f0-224fc9498c90" />
+
+---
+
+# 🛂 **12. Permissions & Groups**
+
+### Custom Permission Example
+
+```python
+class StaffEditorPermissionMixin:
+    permission_classes = [IsStaffEditorPermission]
+```
+<img width="975" height="474" alt="image" src="https://github.com/user-attachments/assets/7ae7671d-719a-4ffd-ad9c-8749a05baf49" />
+
+
+### Django Admin
+
+* Add user
+* Add group
+* Assign permissions:
+
+  * `add_product`
+  * `view_product`
+  * `change_product`
+  * `delete_product`
+
+<img width="746" height="291" alt="image" src="https://github.com/user-attachments/assets/f01f7bd9-ac08-4ca3-8ef2-1bfc43a4c800" />
+<img width="975" height="287" alt="image" src="https://github.com/user-attachments/assets/153a4aa5-6b1b-46bb-9771-426d6e11de0e" />
+<img width="759" height="397" alt="image" src="https://github.com/user-attachments/assets/95d071a2-3a3f-424f-826b-df4ad5880e61" />
+
+
+
+---
+
+# 📄 **13. Pagination**
+
+`settings.py`:
+
+```python
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": 
+        "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 10
+}
+```
+
+Result:
+
+```
+{
+  "count": 15,
+  "next": "...?limit=10&offset=10",
+  "results": [...]
+}
+```
+<img width="833" height="441" alt="image" src="https://github.com/user-attachments/assets/356ca94e-b335-41ee-8fa1-d5c05812eed9" />
+
+---
+
+# 🔍 **14. Search API (Q-Objects)**
+
+```python
+def search(self, query):
+    return self.filter(
+        Q(title__icontains=query) |
+        Q(content__icontains=query)
+    )
+```
+
+Example:
+
+```
+/api/search/?q=laptop
+```
+<img width="975" height="525" alt="image" src="https://github.com/user-attachments/assets/ae6636c7-8789-446d-94e0-1f8b75168d44" />
+
+---
+
+# 🌐 **15. CORS Handling (Port 8111)**
+
+Your JS client runs on:
+
+```
+http://127.0.0.1:8111/
+```
+
+Add to settings:
+
+```python
+INSTALLED_APPS += ["corsheaders"]
+
+MIDDLEWARE.insert(0, "corsheaders.middleware.CorsMiddleware")
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8111",
+    "http://localhost:8111"
+]
+```
+
+---
+
+# 🧪 **16. JavaScript Client (8111)**
+
+### Login
+
+```javascript
+fetch("http://127.0.0.1:8000/api/token/", {
+  method: "POST",
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify({ username, password })
+})
+.then(res => res.json())
+.then(data => localStorage.setItem("access", data.access));
+```
+
+### Authenticated Request
+
+```javascript
+fetch("http://127.0.0.1:8000/api/products/", {
+  headers: {
+    "Authorization": "Bearer " + localStorage.getItem("access")
+  }
+})
+```
+<img width="975" height="346" alt="image" src="https://github.com/user-attachments/assets/e6b87944-f1b2-44c1-b874-fd8c9070a43a" />
 
 ---
